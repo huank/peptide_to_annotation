@@ -23,7 +23,7 @@ IO.foreach(proIDs_to_annot_file) do |line|
 
  (data, *anno) = line.split("\t")		
   if protIDs_to_annot_hash.key?(data)
-    protIDs_to_annot_hash[data] << anno[3]+"\t"  #add a tab to every single annotation even the last one
+    protIDs_to_annot_hash[data] << anno[3]+"\t"  
   else
     protIDs_to_annot_hash[data] = anno[3]+ "\t" 
   end 
