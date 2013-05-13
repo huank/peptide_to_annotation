@@ -13,31 +13,32 @@ peptide_to_ID_hash = Hash.new
 
 output.each do |peptide, protIDs|
   prot = protIDs.split("\t")
-	prot.each do |prot_id|
-		peptide_to_ID_hash [peptide] = prot_id
-	end
+    prot.each do |prot_id|
+	peptide_to_ID_hash [peptide] = prot_id
+    end
 end
 
 protIDs_to_annot_hash = Hash.new
-IO.foreach(proIDs_to_annot_file) do |line| #need to get rid of the first line
+IO.foreach(proIDs_to_annot_file) do |line| 
 
-	(data, *anno) = line.split("\t")		
-	if protIDs_to_annot_hash.key?(data)
-		protIDs_to_annot_hash[data] << anno[3]+"\t"  #add a tab to every single annotation even the last one
-	else
-		protIDs_to_annot_hash[data] = anno[3]+ "\t" 
-	end 
+ (data, *anno) = line.split("\t")		
+  if protIDs_to_annot_hash.key?(data)
+    protIDs_to_annot_hash[data] << anno[3]+"\t"  #add a tab to every single annotation even the last one
+  else
+    protIDs_to_annot_hash[data] = anno[3]+ "\t" 
+  end 
 end
 
 
 peptide_to_ID_hash.each_key do |key| 
-		if  protIDs_to_annot_hash.key? peptide_to_ID_hash[key]    
-			data = peptide_to_ID_hash[key] 
-			peptide_to_ID_hash[key] = protIDs_to_annot_hash[data]		
-		else 			
-			peptide_to_ID_hash.delete(key)
-		end
-	end
+ if  protIDs_to_annot_hash.key? peptide_to_ID_hash[key]    
+   data = peptide_to_ID_hash[key] 
+   peptide_to_ID_hash[key] = protIDs_to_annot_hash[data]		
+ else 			
+   peptide_to_ID_hash.delete(key)
+ end
+end
+	
 file = ARGV[1]
 base = File.basename(file).split(".")[0]
 outfile = base + ext
