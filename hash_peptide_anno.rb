@@ -13,7 +13,7 @@ end
 (pep_to_prot_file, prot_to_annot_file) = ARGV
 
 def get_pep_to_prot(file)
-  pep_to_prot = YAML.load_file(pep_to_prot_file)
+  pep_to_prot = YAML.load_file(file)
 
   def pep_to_prot.prot_ids(peptide)
     prot_s = self[peptide]
@@ -42,8 +42,7 @@ def get_prot_to_annot(file)
 end
 
 prot_to_annot = get_prot_to_annot(prot_to_annot_file)
-p prot_to_annot.size
-abort 'here'
+
 
 pep_to_prot = get_pep_to_prot(pep_to_prot_file)
 
