@@ -21,7 +21,7 @@ sequence = Array.new
   pep = line.split("\t")
 	seq = pep[3].split("\"")
 	seq = seq[1]
-   seq.	
+   
 	 sequence << seq	 
 	if peptide_with_PSM.key? seq   
 	 peptide_with_PSM [seq] = peptide_with_PSM [seq] +1
