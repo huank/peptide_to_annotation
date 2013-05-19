@@ -31,22 +31,22 @@ File.open(default_export_file) do |io|
   end
 end
 
+peptide_to_annot = {}
 tell_how_long {
-  peptide_to_annot = {}
   IO.foreach(peptide_to_annotation_db) do |line|
     line.chomp!
     peptide_to_annot.store( *line.split(': ') ) # storing value as a string!
   end
 }
 
-tell_how_long {
-  total_psms = peptide_with_PSM.values.reduce(:+)
-}
+
+total_psms = peptide_with_PSM.values.reduce(:+)
+
 
 annotation_to_weight = Hash.new {|h,k| h[k] = 0.0 }
 
 peptide_with_PSM.each do |query_peptide, spectral_hit_cnt|
-
+if peptide_to_annot[query_peptide]
   annotations = peptide_to_annot[query_peptide].split("\t")
   weight_of_annotation = 1.0 / annotations.size
 
@@ -57,6 +57,9 @@ peptide_with_PSM.each do |query_peptide, spectral_hit_cnt|
     annotation_to_weight[annotation] += (weight_of_annotation * nrmlzed_psm_cnt)
   end
 end
+end
 
-File.write(outfile, annotation_to_weight.to_yaml)
+File.open(outfile,"w") do |out|
+  out.write(annotation_to_weight.to_yaml)
+end
 
